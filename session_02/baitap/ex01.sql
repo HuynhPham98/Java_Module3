@@ -1,0 +1,33 @@
+CREATE DATABASE ex01;
+USE ex01;
+
+CREATE TABLE product(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(100) NOT NULL,
+	created DATE
+);
+
+CREATE TABLE color (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100),
+status BIT(1) DEFAULT 1
+);
+
+CREATE TABLE size (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+status BIT(1) DEFAULT 1
+);
+
+CREATE TABLE product_detail (
+id INT AUTO_INCREMENT PRIMARY KEY,
+product_id INT,
+color_id INT,
+size_id INT,
+price DOUBLE CHECK(price > 0),
+stock INT CHECK(stock >= 0),
+status BIT(1) DEFAULT 1,
+FOREIGN KEY(product_id) REFERENCES product(id),
+FOREIGN KEY(color_id) REFERENCES color(id),
+FOREIGN KEY(size_id) REFERENCES size(id)
+);
