@@ -1,5 +1,5 @@
-CREATE DATABASE thuchanh_02;
-USE thuchanh_02;
+CREATE DATABASE ss04_thuchanh;
+USE ss04_thuchanh;
 
 CREATE TABLE Class(
 classId INT AUTO_INCREMENT PRIMARY KEY,
@@ -48,35 +48,31 @@ FOREIGN KEY(studentId) REFERENCES Student(studentId)
 
 INSERT INTO Mark(subjectId,studentId,mark,examtim) VALUES
 (1, 1, 60, 1),
-(1, 2, 40, 2),(2, 1, 70, 1),
-(1, 3, 80, 1),(2, 3, 90, 1);
+(1, 2, 40, 2),
+(2, 1, 70, 1),
+(1, 3, 80, 1),
+(2, 3, 90, 1);
 
-SELECT * FROM Class;
-SELECT * FROM Student;
-SELECT * FROM Subject;
-SELECT * FROM Mark;
+-- Hiển thị tổng số lượng sinh viên 
 
--- Hiển thị danh sách tất cả các học viên
+SELECT COUNT(s.studentId) AS totalStudent FROM student AS s;
 
-SELECT studentId,studentName,address FROM Student;
+-- Hiển thị điểm thi lớn nhất của từng môn học.
 
--- Hiển thị danh sách các học viên đang theo học.
+SELECT sub.subId,sub.subName, MAX(m.mark) AS MaxMark FROM subject AS sub
+JOIN mark AS m ON sub.subId = m.subjectId
+GROUP BY sub.subid
+ORDER BY MaxMark DESC;
 
-SELECT studentId,studentName,address FROM Student WHERE status = TRUE;
+-- Hiển thị điểm trung bình học viên có số điểm Tb >= 50 bằng cách sử dụng hàm AVG
 
--- Hiển thị danh sách các môn học có thời gian học nhỏ hơn 10 giờ.
+SELECT s.studentId,s.studentName, AVG(m.mark) AS Dtb FROM student AS s
+JOIN mark AS m ON s.studentId = m.studentId
+GROUP BY s.studentId 
+HAVING Dtb >= 50
+ORDER BY Dtb DESC;
 
-SELECT * FROM Subject WHERE credit < 10;
+-- Sắp xếp sinh viên theo tên tang dần
 
--- Hiển thị danh sách học viên lớp A1.
-
-SELECT Student.studentId,Student.studentName,Class.className 
-FROM Student JOIN Class ON Student.class_id = Class.classId WHERE Class.className = 'A1';
-
--- Hiển thị điểm môn CF của các học viên.
-
-SELECT Student.studentId,Student.studentName,Subject.subName,Mark.mark
-FROM Student
-JOIN Mark ON Student.studentId = Mark.studentId
-JOIN Subject ON Subject.subId = Mark.subjectId
-WHERE Subject.subName = 'CF';
+SELECT * FROM student AS s
+ORDER BY s.studentName;
