@@ -76,17 +76,17 @@ CALL GetOrderWithMinTotalPrice();
 DELIMITER //
 CREATE PROCEDURE show_customer()
 BEGIN
-     SELECT * FROM customers AS c
+     SELECT c.*, SUM(od.odQuantity) AS total FROM customers AS c
      JOIN orders AS o ON c.cid = o.cid
-     WHERE c.cid = (
-     SELECT o.cid FROM orders AS o
      JOIN orderDetail AS od ON o.oid = od.oid
-     WHERE od.odQuantity = (
-     SELECT MIN(odQuantity) FROM orderDetail
-     )
-     LIMIT 1
-     );
+     JOIN product AS p ON od.pid = p.pid
+     WHERE p.pname = 'May Giat'
+     GROUP BY c.cid
+     ORDER BY total ASC
+     LIMIT 1;
 END //
 DELIMITER ;  
  
 CALL show_customer();
+
+-- 
